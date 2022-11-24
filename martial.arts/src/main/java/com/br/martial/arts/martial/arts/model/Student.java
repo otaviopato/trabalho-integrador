@@ -1,6 +1,8 @@
 package com.br.martial.arts.martial.arts.model;
 
 import java.sql.Date;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,7 +27,9 @@ public class Student {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
   private String name;
+  @Column(unique=true)
   private String email;
+  @Column(unique=true)
   private String cpf;
   private String phone;
   private String address;
