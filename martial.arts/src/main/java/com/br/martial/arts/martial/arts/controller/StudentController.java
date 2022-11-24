@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,5 +61,36 @@ public class StudentController {
       }
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
     }
+
+@PutMapping("/{id}")
+public Student putUpdateEmployeeById(@PathVariable("id") Long id,
+    @RequestBody Student fieldsToUpdate) {
+  Optional<Student> employeeFind = this.studentRepository.findById(id);
+  if (employeeFind.isEmpty()) {
+    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
+  }
+  fieldsToUpdate.setId(id);
+  return this.studentRepository.save(fieldsToUpdate);
 }
 
+@PatchMapping("/{id}")
+public Student patchUpdateStudentById(@PathVariable("id") Long id,
+    @RequestBody Student fieldsToUpdate) {
+  Optional<Student> studentsFind = this.studentRepository.findById(id);
+  if (studentsFind.isEmpty()) {
+    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
+  }
+  Student students = studentsFind.get();
+  fieldsToUpdate.setId(id);
+  // Ugly code area
+  fieldsToUpdate.setName(fieldsToUpdate.getName() == null ? students.getName() : fieldsToUpdate.getName());
+  fieldsToUpdate.setEmail(fieldsToUpdate.getEmail() == null ? students.getEmail() : fieldsToUpdate.getEmail());
+  fieldsToUpdate.setCpf(fieldsToUpdate.getCpf() == null ? students.getCpf() : fieldsToUpdate.getCpf());
+  fieldsToUpdate.setPhone(fieldsToUpdate.getPhone() == null ? students.getPhone() : fieldsToUpdate.getPhone());
+  fieldsToUpdate.setAddress(fieldsToUpdate.getAddress() == null ? students.getAddress() : fieldsToUpdate.getAddress());
+  fieldsToUpdate.setBirthDate(fieldsToUpdate.getBirthDate() == null ? students.getBirthDate() : fieldsToUpdate.getBirthDate());
+  // Ugly code area
+  return this.studentRepository.save(fieldsToUpdate);
+}
+
+}
