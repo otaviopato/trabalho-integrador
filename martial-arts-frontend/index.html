@@ -1,0 +1,38 @@
+<button id="get-users">Listar usuários</button>
+<table id="users-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Telefone</th>
+      <th>CPF</th>
+    </tr>
+  </thead>
+  <tbody id="users-list"></tbody>
+</table>
+
+<script>
+const getUsersButton = document.getElementById('get-users');
+const usersList = document.getElementById('users-list');
+
+getUsersButton.addEventListener('click', async () => {
+  const response = await fetch('http://127.0.0.1:8080/students/list');
+  const users = await response.json();
+  users.forEach((user) => {
+    const tr = document.createElement('tr');
+    const idTd = document.createElement('td');
+    idTd.textContent = user.id;
+    const nameTd = document.createElement('td');
+    nameTd.textContent = user.name;
+    const phoneTd = document.createElement('td');
+    phoneTd.textContent = user.phone;
+    const cpfTd = document.createElement('td');
+    cpfTd.textContent = user.cpf;
+    tr.appendChild(idTd);
+    tr.appendChild(nameTd);
+    tr.appendChild(phoneTd);
+    tr.appendChild(cpfTd);
+    usersList.appendChild(tr);
+  });
+});
+</script>
