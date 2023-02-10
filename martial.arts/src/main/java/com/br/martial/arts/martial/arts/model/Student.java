@@ -1,6 +1,7 @@
 package com.br.martial.arts.martial.arts.model;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,4 +36,8 @@ public class Student {
   private String address;
   @JsonFormat(pattern = "dd-MM-yyyy")
   private Date birthDate;
+  @JsonFormat(pattern = "HH:mm")
+  private LocalDateTime journey;
+  @Column(unique=true)
+  private String matricula;
 }

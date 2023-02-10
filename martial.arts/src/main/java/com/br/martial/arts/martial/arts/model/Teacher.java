@@ -1,5 +1,6 @@
 package com.br.martial.arts.martial.arts.model;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -36,5 +37,5 @@ public class Teacher {
     @JsonFormat(pattern = "dd-MM-yyyy")
     private Date birthDate;
     @JsonFormat(pattern = "HH:mm")
-    private Date officeHours;
+    private LocalDateTime officeHours;
 }
