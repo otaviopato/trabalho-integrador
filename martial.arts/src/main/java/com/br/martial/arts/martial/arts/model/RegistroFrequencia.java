@@ -1,8 +1,5 @@
 package com.br.martial.arts.martial.arts.model;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,17 +20,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table
-public class Teacher {
+public class RegistroFrequencia {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String name;
-    @Column(unique=true)
-    private String email;
-    @Column(unique=true)
-    private String cpf;
-    private String phone;
-    private String address;
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    private Date birthDate;
+    //TODO verificar registro de frequencia
 }

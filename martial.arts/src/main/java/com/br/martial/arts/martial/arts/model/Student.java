@@ -36,8 +36,6 @@ public class Student {
   private String address;
   @JsonFormat(pattern = "dd-MM-yyyy")
   private Date birthDate;
-  @JsonFormat(pattern = "HH:mm")
-  private LocalDateTime journey;
   @Column(unique=true)
   private String matricula;
 }

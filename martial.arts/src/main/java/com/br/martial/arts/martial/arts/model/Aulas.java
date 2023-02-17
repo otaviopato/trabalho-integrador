@@ -23,17 +23,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table
-public class Teacher {
+public class Aulas {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name;
-    @Column(unique=true)
-    private String email;
-    @Column(unique=true)
-    private String cpf;
-    private String phone;
-    private String address;
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    private Date birthDate;
 }
