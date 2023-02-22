@@ -36,6 +36,4 @@ public class Teacher {
     private String address;
     @JsonFormat(pattern = "dd-MM-yyyy")
     private Date birthDate;
-    @JsonFormat(pattern = "HH:mm")
-    private LocalDateTime officeHours;
 }
