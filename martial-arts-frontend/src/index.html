@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/src/css/style.css">
+  <title>Alunos</title>
+</head>
+<body>
+  <table id="users-table" align="center" >
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Telefone</th>
+        <th>CPF</th>
+        <th>Matrícula</th>
+      </tr>
+    </thead>
+    <tbody id="users-list"></tbody>
+  </table>
+  <button id="get-users">Listar alunos</button>
+</body>
+</html>
+
+
+<script>
+  var checkBoxes = $("[data-type='ckColuna']");
+var tabela = $("#users-table");
+
+checkBoxes.click(function () {
+    if (checkBoxes.filter(":checked").length > 0) {
+        tabela.removeClass("table");
+    } else {
+        tabela.addClass("table");
+    }        
+
+    var checkBox = $(this);
+    var celulas = $("users-table [isso='" + checkBox.attr("isso") + "']");
+    celulas.toggleClass("hide");
+});
+</script>
+
+<script>
+const getUsersButton = document.getElementById('get-users');
+const usersList = document.getElementById('users-list');
+
+getUsersButton.addEventListener('click', async () => {
+  usersList.innerHTML = '';
+  const response = await fetch('http://127.0.0.1:8080/students/list');
+  const users = await response.json();
+  users.forEach((user) => {
+    const tr = document.createElement('tr');
+    const idTd = document.createElement('td');
+    idTd.textContent = user.id;
+    const nameTd = document.createElement('td');
+    nameTd.textContent = user.name;
+    const phoneTd = document.createElement('td');
+    phoneTd.textContent = user.phone;
+    const cpfTd = document.createElement('td');
+    cpfTd.textContent = user.cpf;
+    const matriculaTd = document.createElement('td');
+    matriculaTd.textContent = user.matricula;
+    tr.appendChild(idTd);
+    tr.appendChild(nameTd);
+    tr.appendChild(phoneTd);
+    tr.appendChild(cpfTd);
+    tr.appendChild(matriculaTd);
+    usersList.appendChild(tr);
+  });
+});
+</script>
