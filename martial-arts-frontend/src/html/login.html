@@ -1,59 +1,64 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" type="text/css" href="/martial-arts-frontend/src/css/style.css">
-    <script>
-      if (sessionStorage.getItem('authToken')) {
-        window.location.href = '../dashboard.html';
-  }
-    </script>
-  </head>
-  
-  <body>
-    <h1>Login</h1>
-    <div class="container">
-    <form class="form">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" type="text/css" href="/martial-arts-frontend/src/css/style.css">
+  <script>
+    if (sessionStorage.getItem('authToken')) {
+      window.location.href = 'index.html';
+    }
+  </script>
+</head>
+<body>
+  <nav>
+    <button>Sair</button>
+  </nav>
+  <div id="logo">
+    <img src="/martial-arts-frontend/src/img/world-taekwondo-logo.png" alt="">  
+  </div>
+  <div class="container">
+    <form class="form" id="login-form">
       <div>
+        <h1>Login</h1>
+
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
       </div>
       <div>
-        <label for="password">Password:</label>
+        <label for="password">Senha:</label>
         <input type="password" id="password" name="password" required>
       </div>
       <button type="submit">Login</button>
     </form>
-    </div>
+  </div>
+  <script>
+   const form = document.querySelector('form');
 
-    <script>
-      const form = document.querySelector('form');
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
 
-      form.addEventListener('submit', (event) => {
-        event.preventDefault();
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const authorization = `Basic ${btoa(unescape(encodeURIComponent(`${email}:${password}`)))}`;
+  const authHeader = {
+    'Content-Type': 'application/json',
+    'Authorization': authorization,
+  };
+  const response = await fetch('http://127.0.0.1:8080/teacher/login', {
+    method: 'POST',
+    headers: authHeader,
+    body: JSON.stringify({ email, password }),
+  });
 
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-
-        fetch('http://127.0.0.1:8080/teacher/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ email, password })
-        })
-        .then((response) => {
-          if (response.ok) {
-            window.location.href = '../index.html';
-          } else {
-            alert('Usuário ou senha inválido!');
-          }
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-      });
-    </script>
-  </body>
+  if (response.ok && response.headers.get('Content-Type').includes('application/json')) {
+    const data = await response.json();
+    localStorage.setItem('authorizationBasicHeader', authorization);
+    window.location.href = 'alunos.html';
+  } else {
+    alert('Usuário ou senha inválido!');
+  }
+});
+  </script>
+</body>
 </html>
