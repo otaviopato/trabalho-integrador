@@ -4,26 +4,34 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="/src/css/style.css">
+  <link rel="stylesheet" type="text/css" href="/martial-arts-frontend/src/css/style.css">
   <title>Alunos</title>
 </head>
 <body>
-  <table id="users-table" align="center" >
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nome</th>
-        <th>Telefone</th>
-        <th>CPF</th>
-        <th>Matrícula</th>
-      </tr>
-    </thead>
-    <tbody id="users-list"></tbody>
-  </table>
-  <button id="get-users">Listar alunos</button>
+  <div class="table-container">
+    <table id="alunos-table" align="center" >
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Telefone</th>
+          <th>CPF</th>
+          <th>Matrícula</th>
+        </tr>
+      </thead>
+      <tbody id="alunos-list"></tbody>
+    </table>
+    <button id="get-alunos" class="button">Listar alunos</button>
+  </div>
+  
 </body>
 </html>
 
+<script>
+    if (!localStorage.getItem('authorizationBasicHeader')) {
+  window.location.href = 'login.html';
+}
+</script>
 
 <script>
   var checkBoxes = $("[data-type='ckColuna']");
@@ -43,13 +51,25 @@ checkBoxes.click(function () {
 </script>
 
 <script>
-const getUsersButton = document.getElementById('get-users');
-const usersList = document.getElementById('users-list');
+const getUsersButton = document.getElementById('get-alunos');
+const usersList = document.getElementById('alunos-list');
 
 getUsersButton.addEventListener('click', async () => {
   usersList.innerHTML = '';
-  const response = await fetch('http://localhost:8080/students/list');
+  const response = await fetch('http://127.0.0.1:8080/teacher/list', {
+    method: 'GET',
+    headers: {
+    'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem('authorizationBasicHeader'),
+    },
+  });
+  if (!response.ok) {
+    window.location.href = 'login.html';
+    alert('Voce nao está logado!');
+    return;
+  }
   const users = await response.json();
+  console.log(users)
   users.forEach((user) => {
     const tr = document.createElement('tr');
     const idTd = document.createElement('td');
