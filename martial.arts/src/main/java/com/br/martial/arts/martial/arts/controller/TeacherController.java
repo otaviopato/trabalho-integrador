@@ -102,10 +102,6 @@ import com.br.martial.arts.martial.arts.repository.TeacherRepository;
  
      String email = request.get("email");
      String password = request.get("password");
-     System.out.println("email");
-     System.out.println(email);
-     System.out.println("password");
-     System.out.println(password);
  
      Teacher teacher = teacherRepository.findByEmail(email);
      System.out.println(teacher);

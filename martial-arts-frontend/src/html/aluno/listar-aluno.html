@@ -8,7 +8,11 @@
   <title>Alunos</title>
 </head>
 <body>
+  <nav>
+    <button>Sair</button>
+  </nav>
   <div class="table-container">
+    
     <table id="alunos-table" align="center" >
       <thead>
         <tr>
@@ -49,14 +53,21 @@ checkBoxes.click(function () {
     celulas.toggleClass("hide");
 });
 </script>
-
+<script>
+  const logoutButton = document.querySelector('nav button');
+  
+  logoutButton.addEventListener('click', () => {
+    localStorage.removeItem('authorizationBasicHeader');
+    window.location.href = 'login.html';
+  });
+  </script>
 <script>
 const getUsersButton = document.getElementById('get-alunos');
 const usersList = document.getElementById('alunos-list');
 
 getUsersButton.addEventListener('click', async () => {
   usersList.innerHTML = '';
-  const response = await fetch('http://127.0.0.1:8080/teacher/list', {
+  const response = await fetch('http://127.0.0.1:8080/students/list', {
     method: 'GET',
     headers: {
     'Content-Type': 'application/json',
@@ -64,7 +75,7 @@ getUsersButton.addEventListener('click', async () => {
     },
   });
   if (!response.ok) {
-    window.location.href = 'login.html';
+    window.location.href = '../login.html';
     alert('Voce nao está logado!');
     return;
   }
