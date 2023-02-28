@@ -3,6 +3,7 @@ package com.br.martial.arts.martial.arts.model;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,4 +40,18 @@ public class Turma {
     private Date data;
     //TODO FK PROFESSOR
     //TODO PIVOT 
+
+    @ManyToOne
+    @JoinColumn(name = "professor_id", nullable=false)
+    private Teacher professor;
+
+    @ManyToOne
+    @JoinColumn(name = "aula_id", nullable=false)
+    private Teacher aula;
+
+    @ManyToMany
+    @JoinTable(name = "turma_aluno",
+                joinColumns = @JoinColumn(name="turma_fk"),
+                inverseJoinColumns = @JoinColumn(name="aluno_fk"))
+    private Set<Student> alunos;
 }

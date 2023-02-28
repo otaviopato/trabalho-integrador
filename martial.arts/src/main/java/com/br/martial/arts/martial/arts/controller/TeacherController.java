@@ -7,8 +7,8 @@ import java.util.Optional;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
- import org.springframework.http.HttpStatus;
- import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,115 +24,141 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.br.martial.arts.martial.arts.DTO.LoginResponse;
 import com.br.martial.arts.martial.arts.model.Teacher;
+import com.br.martial.arts.martial.arts.model.Turma;
 import com.br.martial.arts.martial.arts.repository.TeacherRepository;
+import com.br.martial.arts.martial.arts.repository.TurmaRepository;
 
+@RestController
+@RequestMapping("/teacher")
+// @CrossOrigin(origins = "*")
+public class TeacherController {
 
- @RestController
- @RequestMapping("/teacher")
- //@CrossOrigin(origins = "*")
- public class TeacherController {
+    @Autowired
+    private final TeacherRepository teacherRepository;
+
+    @Autowired
+    private final TurmaRepository turmaRepository;
+
+    public TeacherController(TeacherRepository teacherRepository, TurmaRepository turmaRepository) {
+        this.teacherRepository = teacherRepository;
+        this.turmaRepository = turmaRepository;
+    }
     
-     @Autowired
-     private final TeacherRepository teacherRepository;    
 
-     public TeacherController(TeacherRepository teacherRepository) {
-         this.teacherRepository = teacherRepository;
-     }
-     @GetMapping("/{id}")
-     public Teacher teacher(@PathVariable("id") Long id){
-       Optional<Teacher> teacherFind = this.teacherRepository.findById(id);
-       if (teacherFind.isPresent()) {
-         Teacher teacher = teacherFind.get();
-         return teacher;}
-         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
-       }
+    @GetMapping("/{id}")
+    public Teacher teacher(@PathVariable("id") Long id) {
+        Optional<Teacher> teacherFind = this.teacherRepository.findById(id);
+        if (teacherFind.isPresent()) {
+            Teacher teacher = teacherFind.get();
+            return teacher;
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
+    }
 
-     @PostMapping("/")
-     public Teacher teacher(@RequestBody Teacher teacher){
-       return this.teacherRepository.save(teacher);
-     }
+    @PostMapping("/")
+    public Teacher teacher(@RequestBody Teacher teacher) {
+        return this.teacherRepository.save(teacher);
+    }
 
-     @GetMapping("/list")
-     public List<Teacher> list(@RequestHeader(value = "Authorization", required = false) String authKey) {
-       return this.teacherRepository.findAll();
-     }
+    @GetMapping("/list")
+    public List<Teacher> list(@RequestHeader(value = "Authorization", required = false) String authKey) {
+        return this.teacherRepository.findAll();
+    }
 
-     @DeleteMapping("/{id}")
-     public ResponseEntity<Long> deleteEmployee(@PathVariable("id") Long id,
-         @RequestHeader(value = "Authorization", required = false) String authKey) {
-       Optional<Teacher> existsTeachers = this.teacherRepository.findById(id);
-       if (existsTeachers.isPresent()) {
-         this.teacherRepository.deleteById(id);
-         return new ResponseEntity<>(HttpStatus.OK);
-       }
-       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
-     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Long> deleteEmployee(@PathVariable("id") Long id,
+            @RequestHeader(value = "Authorization", required = false) String authKey) {
+        Optional<Teacher> existsTeachers = this.teacherRepository.findById(id);
+        if (existsTeachers.isPresent()) {
+            this.teacherRepository.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
+    }
 
- @PutMapping("/{id}")
- public Teacher putUpdateEmployeeById(@PathVariable("id") Long id,
-     @RequestBody Teacher fieldsToUpdate) {
-   Optional<Teacher> employeeFind = this.teacherRepository.findById(id);
-   if (employeeFind.isEmpty()) {
-     throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
-   }
-   fieldsToUpdate.setId(id);
-   return this.teacherRepository.save(fieldsToUpdate);
- }
+    @PutMapping("/{id}")
+    public Teacher putUpdateEmployeeById(@PathVariable("id") Long id,
+            @RequestBody Teacher fieldsToUpdate) {
+        Optional<Teacher> employeeFind = this.teacherRepository.findById(id);
+        if (employeeFind.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
+        }
+        fieldsToUpdate.setId(id);
+        return this.teacherRepository.save(fieldsToUpdate);
+    }
 
- @PatchMapping("/{id}")
- public Teacher patchUpdateTeacherById(@PathVariable("id") Long id,
-     @RequestBody Teacher fieldsToUpdate) {
-   Optional<Teacher> teachersFind = this.teacherRepository.findById(id);
-   if (teachersFind.isEmpty()) {
-     throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
-   }
-   Teacher teachers = teachersFind.get();
-   fieldsToUpdate.setId(id);
-   fieldsToUpdate.setName(fieldsToUpdate.getName() == null ? teachers.getName() : fieldsToUpdate.getName());
-   fieldsToUpdate.setEmail(fieldsToUpdate.getEmail() == null ? teachers.getEmail() : fieldsToUpdate.getEmail());
-   fieldsToUpdate.setCpf(fieldsToUpdate.getCpf() == null ? teachers.getCpf() : fieldsToUpdate.getCpf());
-   fieldsToUpdate.setPhone(fieldsToUpdate.getPhone() == null ? teachers.getPhone() : fieldsToUpdate.getPhone());
-   fieldsToUpdate.setAddress(fieldsToUpdate.getAddress() == null ? teachers.getAddress() : fieldsToUpdate.getAddress());
-   fieldsToUpdate.setBirthDate(fieldsToUpdate.getBirthDate() == null ? teachers.getBirthDate() : fieldsToUpdate.getBirthDate());
-   return this.teacherRepository.save(fieldsToUpdate);
- }
+    @PatchMapping("/{id}")
+    public Teacher patchUpdateTeacherById(@PathVariable("id") Long id,
+            @RequestBody Teacher fieldsToUpdate) {
+        Optional<Teacher> teachersFind = this.teacherRepository.findById(id);
+        if (teachersFind.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
+        }
+        Teacher teachers = teachersFind.get();
+        fieldsToUpdate.setId(id);
+        fieldsToUpdate.setName(fieldsToUpdate.getName() == null ? teachers.getName() : fieldsToUpdate.getName());
+        fieldsToUpdate.setEmail(fieldsToUpdate.getEmail() == null ? teachers.getEmail() : fieldsToUpdate.getEmail());
+        fieldsToUpdate.setCpf(fieldsToUpdate.getCpf() == null ? teachers.getCpf() : fieldsToUpdate.getCpf());
+        fieldsToUpdate.setPhone(fieldsToUpdate.getPhone() == null ? teachers.getPhone() : fieldsToUpdate.getPhone());
+        fieldsToUpdate
+                .setAddress(fieldsToUpdate.getAddress() == null ? teachers.getAddress() : fieldsToUpdate.getAddress());
+        fieldsToUpdate.setBirthDate(
+                fieldsToUpdate.getBirthDate() == null ? teachers.getBirthDate() : fieldsToUpdate.getBirthDate());
+        return this.teacherRepository.save(fieldsToUpdate);
+    }
 
- @PostMapping("/login")
- public ResponseEntity<LoginResponse> login(@RequestBody Map<String, String> request, HttpSession session) {
- 
-     String email = request.get("email");
-     String password = request.get("password");
-     System.out.println("email");
-     System.out.println(email);
-     System.out.println("password");
-     System.out.println(password);
- 
-     Teacher teacher = teacherRepository.findByEmail(email);
-     System.out.println(teacher);
- 
-     if (teacher != null && BCrypt.checkpw(password, teacher.getPassword())) {
-      session.setAttribute("teacher", teacher);
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody Map<String, String> request, HttpSession session) {
 
-      LoginResponse response = new LoginResponse();
-      //response.setAuthToken("token"); // substitua "token" pelo valor do token gerado
-      response.setUsername(teacher.getEmail());
+        String email = request.get("email");
+        String password = request.get("password");
+        System.out.println("email");
+        System.out.println(email);
+        System.out.println("password");
+        System.out.println(password);
 
-      return ResponseEntity.ok(response);
-  } else {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-  }
+        Teacher teacher = teacherRepository.findByEmail(email);
+        System.out.println(teacher);
+
+        if (teacher != null && BCrypt.checkpw(password, teacher.getPassword())) {
+            session.setAttribute("teacher", teacher);
+
+            LoginResponse response = new LoginResponse();
+            // response.setAuthToken("token"); // substitua "token" pelo valor do token
+            // gerado
+            response.setUsername(teacher.getEmail());
+
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
+    }
+
+    @PostMapping("/{teacherId}/turma")
+    public Turma createTurma(@PathVariable("teacherId") Long teacherId, @RequestBody Turma turma) {
+        Optional<Teacher> teacherFind = this.teacherRepository.findById(teacherId);
+        if (teacherFind.isPresent()) {
+            Teacher teacher = teacherFind.get();
+            turma.setProfessor(teacher);
+            return this.turmaRepository.save(turma);
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Teacher not found");
+    }
+
+    @GetMapping("/turma/{id}")
+    public Turma getTurmaById(@PathVariable("id") Long id) {
+        Optional<Turma> turma = this.turmaRepository.findById(id);
+        if (turma.isPresent()) {
+            return turma.get();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Turma not found");
+        }
+    }
+
 }
-  @GetMapping("/logout")
-  public String logout(HttpSession session) {
-    session.invalidate();
-    return "redirect:/login";
-  }
-  
-<<<<<<< HEAD
-
-
- }
-=======
-}
- 
->>>>>>> 3dc2e401a74b59bbff2c267a356ddd81927dc0ad
