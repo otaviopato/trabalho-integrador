@@ -41,7 +41,7 @@ public class RegistroFrequenciaController {
     }
 
     @PostMapping("/registrofrequencia")
-    public RegistroFrequencia createRegistroFrequencia(@Valid @RequestBody RegistroFrequencia registroFrequencia) {
+    public RegistroFrequencia createRegistroFrequencia(@RequestBody RegistroFrequencia registroFrequencia) {
         return registroFrequenciaRepository.save(registroFrequencia);
     }
 

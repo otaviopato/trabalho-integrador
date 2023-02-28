@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.br.martial.arts.martial.arts.controller.AulasController;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
@@ -47,7 +48,7 @@ public class Turma {
 
     @ManyToOne
     @JoinColumn(name = "aula_id", nullable=false)
-    private Teacher aula;
+    private Aulas aula;
 
     @ManyToMany
     @JoinTable(name = "turma_aluno",
