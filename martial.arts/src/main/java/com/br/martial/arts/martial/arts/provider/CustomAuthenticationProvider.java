@@ -31,6 +31,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String password = authentication.getCredentials().toString();
         Authentication authTeacher = authenticateTeacher(username, password);
         if (authTeacher != null) {
+            System.out.println("authTeacher 2");
+            System.out.println(authTeacher);
             return authTeacher;
         }
         Authentication authSecretaria = authenticateSecretaria(username, password);
@@ -43,12 +45,21 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     private Authentication authenticateTeacher(String username, String password) throws AuthenticationException {
         UserDetails userDetails = teacherService.loadUserByUsername(username);
+        System.out.println(username);
+        System.out.println(password);
+        System.out.println(userDetails);
         if (userDetails == null) {
             System.out.println("userDetails");
             return null;
         }
+        System.out.println(userDetails.getPassword());
+        System.out.println(passwordEncoder.matches(password, userDetails.getPassword()));
         if (passwordEncoder.matches(password, userDetails.getPassword())) {
-            return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
+            Authentication authTeacher = new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
+            System.out.println(userDetails.getAuthorities());
+            System.out.println("authTeacher");
+            System.out.println(authTeacher);
+            return authTeacher;
         }
         throw new BadCredentialsException("Invalid email or password");
     }
