@@ -3,8 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <title>Cadastro de Aluno</title>
+  <style>
+    /* Estilos para o corpo da página */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Estilos para o cabeçalho da página */
+    h1 {
+      margin-top: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #333;
+    }
+
+    /* Estilos para o formulário */
+    form {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="date"] {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      color: #333;
+    }
+
+    input[type="submit"] {
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #3e8e41;
+    }
+
+    /* Estilos para o botão de voltar */
+    button {
+      background-color: #fff;
+      color: #333;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    button:hover {
+      background-color: #f2f2f2;
+    }
+  </style>
 </head>
 <body>
+  <button onclick="javascript:history.back()">↩️ Voltar</button>
+
   <h1>Cadastro de Aluno</h1>
   <form method="POST" action="http://localhost:8080/secretaria/register" id="cadastro-form">
     <label for="name">Nome:</label>

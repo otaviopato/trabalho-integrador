@@ -110,7 +110,7 @@ import com.br.martial.arts.martial.arts.repository.TeacherRepository;
       session.setAttribute("teacher", teacher);
 
       LoginResponse response = new LoginResponse();
-      //response.setAuthToken("token"); // substitua "token" pelo valor do token gerado
+      response.setAuthToken("token"); // substitua "token" pelo valor do token gerado
       response.setUsername(teacher.getEmail());
 
       return ResponseEntity.ok(response);

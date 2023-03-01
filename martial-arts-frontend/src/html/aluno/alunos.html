@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Exemplo de Botões</title>
+    <link rel="stylesheet" type="text/css" href="/martial-arts-frontend/src/css/style.css">
+	<style>
+
+	</style>
+</head>
+<body>
+	<a href="../secretaria/inicial_secretaria.html">↩️ Tela inicial</a>
+	<button onclick="javascript:history.back()">↩️ Voltar</button>
+    <div id="logo">
+        <img src="/martial-arts-frontend/src/img/world-taekwondo-logo.png" alt="">  
+      </div>
+<div class="container">
+	<button class="button-aluno create-button" onclick="window.location.href = 'cadastro-aluno.html';">Cadastrar Aluno</button>
+	<button class="button-aluno list-button" onclick="window.location.href = 'listar-aluno.html';">Listar Alunos</button>
+</div>
+
+</body>
+<script>
+    if (!localStorage.getItem('authorizationBasicHeader')) {
+        window.location.href = '../login.html';
+}
+</script>
+</html>
+

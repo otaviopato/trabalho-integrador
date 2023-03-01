@@ -40,7 +40,7 @@ public class StudentController {
         return student;}
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
       }
-    
+
     @PostMapping("/")
     public Student student(@RequestBody Student student){
       return this.studentRepository.save(student);

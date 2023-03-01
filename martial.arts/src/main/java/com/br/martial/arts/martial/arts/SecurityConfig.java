@@ -1,5 +1,7 @@
 package com.br.martial.arts.martial.arts;
 
+import java.util.Collections;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,9 +32,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("**/login").permitAll()
                 .antMatchers("/teacher/**").hasRole("PROFESSOR")
                 .antMatchers("/secretaria/**").hasRole("SECRETARIA")
+                .antMatchers("/teacher/**").hasRole("SECRETARIA")
                 .antMatchers("/students/**").hasRole("SECRETARIA")
-                //.antMatchers("/students/list").hasRole("PROFESSOR")
-                //.antMatchers("/teacher/**").access("hasRole('PROFESSOR')")
+                .antMatchers("/students/list").hasRole("PROFESSOR")
                 .anyRequest().authenticated()
             .and()
                 .httpBasic()
@@ -54,8 +56,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 }

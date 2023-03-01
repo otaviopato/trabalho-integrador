@@ -48,7 +48,7 @@ public class SecretariaController {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not Found");
     }
 
-    @PostMapping("/register")
+    @PostMapping("/")
     public Secretaria secretaria(@RequestBody Secretaria secretaria) {
       return this.secretariaRepository.save(secretaria);
     }
