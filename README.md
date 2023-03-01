@@ -59,27 +59,20 @@ Para adicionar um novo professor, você pode usar o seguinte comando `curl`:
 "password": "senhadificil321"
 }'</code>
 
-## Adicionando uma nova aula
 
-Para adicionar uma nova aula, você pode usar o seguinte comando `curl`:
+## Adicionando uma nova secretária
 
-<code>curl --location --request POST 'localhost:8080/aulas/'
+Para adicionar uma nova secretária, você pode usar o seguinte comando `curl`:
+
+<code>curl --location --request POST 'localhost:8080/secretaria/'
 --header 'Content-Type: application/json'
 --data-raw '{
-"name": "Aula 18",
-}'</code>
-
-## Adicionando uma nova turma
-
-Para adicionar uma nova turma, você pode usar o seguinte comando `curl`:
-
-<code>curl --location --request POST 'localhost:8080/turma/'
---header 'Content-Type: application/json'
---data-raw '{
-"name": "Johnson",
-"data": "11/11/1980",
-"horas": "2011-01-01 00:00:00",
-"professor_id": 1,
-"aula_id": 2
+"name": "Jonna",
+"email": "jonna@hotmail.com" ,
+"cpf": "010019121929",
+"phone": "9489291828",
+"address": "Rua Terra, 365",
+"birthDate": "21-09-1980",
+"password": "dificilsenha321"
 }'</code>
 
