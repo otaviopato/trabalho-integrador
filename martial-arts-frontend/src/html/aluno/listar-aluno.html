@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/martial-arts-frontend/src/css/style.css">
+  <title>Alunos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+    }
+  
+    nav {
+      background-color: #333;
+      color: #fff;
+      padding: 1rem;
+    }
+  
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.2rem;
+      text-align: center;
+      margin: 0 1rem;
+    }
+  
+    nav a:hover {
+      text-decoration: underline;
+    }
+  
+    .table-container {
+      margin: 2rem;
+    }
+  
+    #alunos-table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 2rem;
+    }
+  
+    #alunos-table th,
+    #alunos-table td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+  
+    #alunos-table th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
+  
+    #alunos-table tbody tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+  
+    #searchByName {
+      display: block;
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      border: none;
+      border-radius: 5px;
+      box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+      width: 100%;
+    }
+  
+    button {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+    }
+  
+    button:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <nav style="width: 100%; display: flex; justify-content: space-between; position: relative; flex-direction: row; align-items: center;">
+    <a href="./alunos.html" style="display: flex; flex-direction: column; width: 33%;">↩️ Voltar</a>
+    <a href="./cadastro-aluno.html" style="display: flex; flex-direction: column; width: 34%;">➕ Cadastrar</a>
+    <a href="../login.html" id="logout" style="color: #fff; text-decoration: none;">🚪 Sair</a>
+  </nav>
+  <div class="table-container">
+    <input id="searchByName" style="display: block; margin-bottom: 1rem; padding: 0.5rem; border: none; border-radius: 5px; box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3); width: 100%;" placeholder="Buscar por nome"></input>
+<table id="alunos-table" align="center">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Telefone</th>
+      <th>CPF</th>
+      <th>Matrícula</th>
+      <th>Editar</th>
+      <th>Deletar</th>
+    </tr>
+  </thead>
+  <tbody id="alunos-list"></tbody>
+</table>
+
+<script>
+  const alunosList = document.getElementById('alunos-list');
+
+  async function getAlunos() {
+    alunosList.innerHTML = '';
+    const response = await fetch('http://127.0.0.1:8080/students/list', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('authorizationBasicHeader'),
+      },
+    });
+    if (!response.ok) {
+      window.location.href = '../login.html';
+      alert('Você não está logado!');
+      return;
+    }
+    const alunos = await response.json();
+    console.log(alunos);
+    alunos.forEach((aluno) => {
+      const tr = document.createElement('tr');
+
+      const idTd = document.createElement('td');
+      idTd.textContent = aluno.id;
+
+      const nameTd = document.createElement('td');
+      nameTd.textContent = aluno.name;
+
+      const phoneTd = document.createElement('td');
+      phoneTd.textContent = aluno.phone;
+
+      const cpfTd = document.createElement('td');
+      cpfTd.textContent = aluno.cpf;
+
+      const matriculaTd = document.createElement('td');
+      matriculaTd.textContent = aluno.matricula;
+  
+      const updateTd = document.createElement('td');
+      const updateButton = document.createElement('button');
+      updateButton.textContent = "✏️";
+      updateButton.addEventListener('click', () => {
+        localStorage.setItem("studentEdit", JSON.stringify(aluno, null, 2))
+        window.location.href = `./aluno-edit.html`;
+      });
+      updateTd.appendChild(updateButton);
+
+      const deleteTd = document.createElement('td');
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = "🗑️";
+      deleteButton.addEventListener('click', async () => {
+        const response = await fetch(`http://127.0.0.1:8080/students/${aluno.id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': '*',
+            'Access-Control-Allow-Headers': '*',
+            'Authorization': localStorage.getItem('authorizationBasicHeader'),
+          },
+        }).catch(e => e);
+
+        if (response instanceof Error) {
+          console.error(response);
+          window.alert('Ocorreu um erro ao tentar deletar');
+          return;
+        }
+        console.log('response', response)
+        if (!response.ok) {
+          window.location.href = '../login.html';
+          alert('Você não está logado!');
+          return;
+        }
+        const trElement = deleteButton.parentNode.parentNode;
+        trElement.remove();
+      });
+      deleteTd.appendChild(deleteButton);
+
+      tr.appendChild(idTd);
+      tr.appendChild(nameTd);
+      tr.appendChild(phoneTd);
+      tr.appendChild(cpfTd);
+      tr.appendChild(matriculaTd);
+      tr.appendChild(updateTd);
+      tr.appendChild(deleteTd);
+      alunosList.appendChild(tr);
+    });
+  }
+  getAlunos();
+
+  const searchInput = document.getElementById('searchByName');
+  searchInput.addEventListener('keyup', () => {
+    const searchText = searchInput.value.toLowerCase();
+    const rows = document.querySelectorAll('#alunos-table tbody tr');
+    rows.forEach(row => {
+      const name = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+      if (name.includes(searchText) || searchText === '') {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  });
+
+  const logout = document.getElementById("logout");
+  logout.addEventListener('click', () => {
+    localStorage.removeItem('authorizationBasicHeader');
+  });
+</script>

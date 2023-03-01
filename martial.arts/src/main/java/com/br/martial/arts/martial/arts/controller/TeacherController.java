@@ -1,6 +1,5 @@
 package com.br.martial.arts.martial.arts.controller;
 
-import java.net.http.HttpHeaders;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -11,26 +10,26 @@ import org.springframework.beans.factory.annotation.Autowired;
  import org.springframework.http.HttpStatus;
  import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
- import org.springframework.web.bind.annotation.GetMapping;
- import org.springframework.web.bind.annotation.PatchMapping;
- import org.springframework.web.bind.annotation.PathVariable;
- import org.springframework.web.bind.annotation.PostMapping;
- import org.springframework.web.bind.annotation.PutMapping;
- import org.springframework.web.bind.annotation.RequestBody;
- import org.springframework.web.bind.annotation.RequestHeader;
- import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
- import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.server.ResponseStatusException;
 
- import com.br.martial.arts.martial.arts.model.Teacher;
- import com.br.martial.arts.martial.arts.repository.TeacherRepository;
+import com.br.martial.arts.martial.arts.DTO.LoginResponse;
+import com.br.martial.arts.martial.arts.model.Teacher;
+import com.br.martial.arts.martial.arts.repository.TeacherRepository;
 
 
  @RestController
  @RequestMapping("/teacher")
+ //@CrossOrigin(origins = "*")
  public class TeacherController {
     
      @Autowired
@@ -99,27 +98,31 @@ import org.springframework.web.bind.annotation.RestController;
  }
 
  @PostMapping("/login")
- public ResponseEntity<String> login(@RequestBody Map<String, String> request, HttpSession session) {
+ public ResponseEntity<LoginResponse> login(@RequestBody Map<String, String> request, HttpSession session) {
  
      String email = request.get("email");
      String password = request.get("password");
  
      Teacher teacher = teacherRepository.findByEmail(email);
+     System.out.println(teacher);
  
      if (teacher != null && BCrypt.checkpw(password, teacher.getPassword())) {
-         session.setAttribute("teacher", teacher);
-         return ResponseEntity.ok().build();
-     } else {
-         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-     }
- }
-  
+      session.setAttribute("teacher", teacher);
+
+      LoginResponse response = new LoginResponse();
+      response.setAuthToken("token"); // substitua "token" pelo valor do token gerado
+      response.setUsername(teacher.getEmail());
+
+      return ResponseEntity.ok(response);
+  } else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+  }
+}
   @GetMapping("/logout")
   public String logout(HttpSession session) {
     session.invalidate();
     return "redirect:/login";
   }
   
-
-
- }
+}
+ 

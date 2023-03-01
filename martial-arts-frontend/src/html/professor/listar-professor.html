@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professores</title>
+</head>
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 0;">
+  <nav style="background-color: #333; color: #fff; display: flex; justify-content: space-between; align-items: center; padding: 1rem;">
+    <a href="./professores.html" style="color: #fff; text-decoration: none;">↩️ Voltar</a>
+    <a href="./cadastro-professor.html" style="background-color: #fff; color: #333; text-decoration: none; padding: 0.5rem 1rem; border-radius: 5px;">➕ Cadastrar</a>
+    <a href="../login.html" id="logout" style="color: #fff; text-decoration: none;">🚪 Sair</a>
+  </nav>
+  <div class="table-container" style="margin: 1rem;">
+    <input id="searchByName" style="display: block; margin-bottom: 1rem; padding: 0.5rem; border: none; border-radius: 5px; box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3); width: 100%;" placeholder="Buscar por nome"></input>
+    <table id="professors-table" align="center" style="border-collapse: collapse; width: 100%;">
+      <thead style="background-color: #333; color: #fff;">
+        <tr>
+          <th style="padding: 1rem;">ID</th>
+          <th style="padding: 1rem;">Nome</th>
+          <th style="padding: 1rem;">Telefone</th>
+          <th style="padding: 1rem;">CPF</th>
+          <th style="padding: 1rem;">Editar</th>
+          <th style="padding: 1rem;">Deletar</th>
+        </tr>
+      </thead>
+      <tbody id="professors-list"></tbody>
+    </table>
+  </div>
+
+<script>
+  const professorsList = document.getElementById('professors-list');
+  let professores = [];
+
+  async function getProfessores() {
+    professorsList.innerHTML = '';
+    const response = await fetch('http://127.0.0.1:8080/teacher/list', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('authorizationBasicHeader'),
+      },
+    });
+    if (!response.ok) {
+      window.location.href = '../login.html';
+      alert('Você não está logado!');
+      return;
+    }
+    const professors = await response.json();
+    professores.push(...professors);
+    professors.forEach((professor) => {
+      const tr = document.createElement('tr');
+
+      const idTd = document.createElement('td');
+      idTd.textContent = professor.id;
+      idTd.style.padding = '1rem';
+
+      const nameTd = document.createElement('td');
+      nameTd.textContent = professor.name;
+      idTd.style.padding = '1rem';
+
+      const phoneTd = document.createElement('td');
+      phoneTd.textContent = professor.phone;
+      phoneTd.style.padding = '1rem';
+
+      const cpfTd = document.createElement('td');
+      cpfTd.textContent = professor.cpf;
+      cpfTd.style.padding = '1rem';
+  
+      const updateTd = document.createElement('td');
+      const updateButton = document.createElement('button');
+      updateTd.style.padding = '1rem';
+      updateButton.textContent = "✏️";
+      updateButton.addEventListener('click', () => {
+        localStorage.setItem("studentEdit", JSON.stringify(professor, null, 2))
+        window.location.href = `./professor-edit.html`;
+      });
+      updateTd.appendChild(updateButton);
+
+      const deleteTd = document.createElement('td');
+      const deleteButton = document.createElement('button');
+      deleteButton.style.padding = '1rem';
+      deleteButton.textContent = "🗑️";
+      deleteButton.addEventListener('click', async () => {
+        const response = await fetch(`http://127.0.0.1:8080/teacher/${professor.id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': '*',
+            'Access-Control-Allow-Headers': '*',
+            'Authorization': localStorage.getItem('authorizationBasicHeader'),
+          },
+        }).catch(e => e);
+
+        if (response instanceof Error) {
+          console.error(response);
+          window.alert('Ocorreu um erro ao tentar deletar');
+          return;
+        }
+        console.log('response', response)
+        if (!response.ok) {
+          window.location.href = '../login.html';
+          alert('Você não está logado!');
+          return;
+        }
+        const trElement = deleteButton.parentNode.parentNode;
+        trElement.remove();
+      });
+      deleteTd.appendChild(deleteButton);
+
+      tr.appendChild(idTd);
+      tr.appendChild(nameTd);
+      tr.appendChild(phoneTd);
+      tr.appendChild(cpfTd);
+      tr.appendChild(updateTd);
+      tr.appendChild(deleteTd);
+      professorsList.appendChild(tr);
+    });
+  }
+  getProfessores();
+
+  const searchInput = document.getElementById('searchByName');
+  searchInput.addEventListener('input', () => {
+    const searchText = searchInput.value.toLowerCase();
+    const rows = document.querySelectorAll('#professors-list tr');
+    rows.forEach(row => {
+      const name = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+      if (name.includes(searchText)) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  });
+
+  const logout = document.getElementById("logout");
+  logout.addEventListener('click', () => {
+    localStorage.removeItem('authorizationBasicHeader');
+  });
+</script>

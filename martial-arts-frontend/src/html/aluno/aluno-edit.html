@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Aluno</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+    }
+  
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+  
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"],
+    textarea {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+  
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+    }
+  
+    button:hover {
+      background-color: #3e8e41;
+    }
+  </style>
+</head>
+<body>
+  <button onclick="javascript:history.back()">↩️ Voltar</button>
+
+  <label for="nome">Nome:</label>
+  <input type="text" id="nome" name="nome" required><br>
+
+  <label for="cpf">CPF:</label>
+  <input type="text" id="cpf" name="cpf" required><br>
+
+  <label for="telefone">Telefone:</label>
+  <input type="tel" id="telefone" name="telefone" required><br>
+
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email" required><br>
+
+  <label for="matricula">Matricula:</label>
+  <input type="matricula" id="matricula" name="matricula" required><br>
+
+  <label for="endereco">Endereço:</label>
+  <textarea id="endereco" name="endereco"></textarea><br>
+
+  <button id="update-button" onclick="updateAluno()">💾 Salvar</button>
+
+<script>
+    let aluno = {};
+
+    async function getAluno() {
+      const alunoLocalStorage = localStorage.getItem('studentEdit');
+      if (alunoLocalStorage) {
+        aluno = JSON.parse(alunoLocalStorage);
+      }
+      if (!alunoLocalStorage) {
+        const response = await fetch(`http://127.0.0.1:8080/students/${aluno.id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('authorizationBasicHeader'),
+          },
+        });
+        if (!response.ok) {
+          alert('Não foi possível obter as informações do aluno!');
+          return;
+        }
+        localStorage.setItem('studentEdit', response.json());
+        aluno = JSON.parse(response.json());
+      }
+
+      document.getElementById('nome').value = aluno.name;
+      document.getElementById('cpf').value = aluno.cpf;
+      document.getElementById('telefone').value = aluno.phone;
+      document.getElementById('matricula').value = aluno.matricula;
+      document.getElementById('email').value = aluno.email;
+      document.getElementById('endereco').value = aluno.address;
+    }
+
+    async function updateAluno() {
+      const nome = document.getElementById('nome').value;
+      const cpf = document.getElementById('cpf').value;
+      const telefone = document.getElementById('telefone').value;
+      const matricula = document.getElementById('matricula').value;
+      const email = document.getElementById('email').value;
+      const endereco = document.getElementById('endereco').value;
+      console.log('TESTE', {
+        id: aluno.id,
+        name: nome,
+        cpf: cpf,
+        matricula,
+        phone: telefone,
+        email,
+        address: endereco,
+      });
+      const response = await fetch(`http://127.0.0.1:8080/students/${aluno.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': '*',
+          'Access-Control-Allow-Headers': '*',
+          'Authorization': localStorage.getItem('authorizationBasicHeader'),
+        },
+        body: JSON.stringify({
+          name: nome,
+          cpf: cpf,
+          matricula,
+          phone: telefone,
+          email,
+          address: endereco,
+        }),
+      });
+
+      if (response instanceof Error) {
+        console.error(response);
+        window.alert('Não foi possível atualizar as informações do aluno!');
+      }
+
+      if (!response.ok) {
+        alert('Não foi possível atualizar as informações do aluno!');
+        return;
+      }
+      alert('As informações do aluno foram atualizadas com sucesso!');
+      window.location.href = './listar-aluno.html';
+    }
+
+    (async () => { await getAluno(); })();
+  </script>
+</body>
+</html>

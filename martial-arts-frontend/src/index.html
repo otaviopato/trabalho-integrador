@@ -48,7 +48,7 @@ const usersList = document.getElementById('users-list');
 
 getUsersButton.addEventListener('click', async () => {
   usersList.innerHTML = '';
-  const response = await fetch('http://127.0.0.1:8080/students/list');
+  const response = await fetch('http://localhost:8080/students/list');
   const users = await response.json();
   users.forEach((user) => {
     const tr = document.createElement('tr');
