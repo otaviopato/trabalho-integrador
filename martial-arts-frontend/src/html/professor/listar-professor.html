@@ -21,6 +21,7 @@
           <th style="padding: 1rem;">Nome</th>
           <th style="padding: 1rem;">Telefone</th>
           <th style="padding: 1rem;">CPF</th>
+          <th style="padding: 1rem;">Email</th>
           <th style="padding: 1rem;">Editar</th>
           <th style="padding: 1rem;">Deletar</th>
         </tr>
@@ -67,7 +68,10 @@
       const cpfTd = document.createElement('td');
       cpfTd.textContent = professor.cpf;
       cpfTd.style.padding = '1rem';
-  
+
+      const emailTd = document.createElement('td');
+      emailTd.textContent = professor.email;
+      emailTd.style.padding = '1rem';
       const updateTd = document.createElement('td');
       const updateButton = document.createElement('button');
       updateTd.style.padding = '1rem';
@@ -114,6 +118,7 @@
       tr.appendChild(nameTd);
       tr.appendChild(phoneTd);
       tr.appendChild(cpfTd);
+      tr.appendChild(emailTd);
       tr.appendChild(updateTd);
       tr.appendChild(deleteTd);
       professorsList.appendChild(tr);
@@ -139,4 +144,32 @@
   logout.addEventListener('click', () => {
     localStorage.removeItem('authorizationBasicHeader');
   });
+</script>
+<script>
+  function ValidaCPF(){	
+	var RegraValida=document.getElementById("RegraValida").value; 
+	var cpfValido = /^(([0-9]{3}.[0-9]{3}.[0-9]{3}-[0-9]{2})|([0-9]{11}))$/;	 
+	if (cpfValido.test(RegraValida) == true)	{ 
+	console.log("CPF Válido");	
+	} else	{	 
+	console.log("CPF Inválido");	
+	}
+    }
+  function fMasc(objeto,mascara) {
+obj=objeto
+masc=mascara
+setTimeout("fMascEx()",1)
+}
+
+  function fMascEx() {
+obj.value=masc(obj.value)
+}
+
+   function mCPF(cpf){
+cpf=cpf.replace(/\D/g,"")
+cpf=cpf.replace(/(\d{3})(\d)/,"$1.$2")
+cpf=cpf.replace(/(\d{3})(\d)/,"$1.$2")
+cpf=cpf.replace(/(\d{3})(\d{1,2})$/,"$1-$2")
+return cpf
+}
 </script>

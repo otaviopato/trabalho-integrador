@@ -15,6 +15,7 @@
     <h1>Cadastro</h1>
     <div class="buttons">
       <button id="aluno-button">Alunos</button>
+      <a href="../login.html" id="logout" style="color: #fff; text-decoration: none;">🚪 Sair</a>
     </div>
   </div>
 </body>
@@ -31,4 +32,8 @@
     alunoButton.addEventListener('click', () => {
       window.location.href = '../aluno/alunos.html';
     });
+    const logout = document.getElementById("logout");
+     logout.addEventListener('click', () => {
+    localStorage.removeItem('authorizationBasicHeader');
+  });
 </script>

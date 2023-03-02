@@ -92,6 +92,7 @@
       <th>Nome</th>
       <th>Telefone</th>
       <th>CPF</th>
+      <th>Email</th>
       <th>Matrícula</th>
       <th>Editar</th>
       <th>Deletar</th>
@@ -133,6 +134,9 @@
 
       const cpfTd = document.createElement('td');
       cpfTd.textContent = aluno.cpf;
+
+      const emailTd = document.createElement('td');
+      emailTd.textContent = aluno.email;
 
       const matriculaTd = document.createElement('td');
       matriculaTd.textContent = aluno.matricula;
@@ -181,6 +185,7 @@
       tr.appendChild(nameTd);
       tr.appendChild(phoneTd);
       tr.appendChild(cpfTd);
+      tr.appendChild(emailTd);
       tr.appendChild(matriculaTd);
       tr.appendChild(updateTd);
       tr.appendChild(deleteTd);

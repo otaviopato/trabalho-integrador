@@ -62,9 +62,6 @@
   <label for="email">Email:</label>
   <input type="email" id="email" name="email" required><br>
 
-  <label for="senha">Senha:</label>
-  <input type="senha" id="senha" name="senha" required><br>
-
   <label for="endereco">Endereço:</label>
   <textarea id="endereco" name="endereco"></textarea><br>
 
@@ -98,7 +95,6 @@
       document.getElementById('cpf').value = professor.cpf;
       document.getElementById('telefone').value = professor.phone;
       document.getElementById('email').value = professor.email;
-      document.getElementById('senha').value = professor.password;
       document.getElementById('endereco').value = professor.address;
     }
 
@@ -108,7 +104,6 @@
       const telefone = document.getElementById('telefone').value;
       const email = document.getElementById('email').value;
       const endereco = document.getElementById('endereco').value;
-      const password = document.getElementById('senha').value;
 
       const response = await fetch(`http://127.0.0.1:8080/teacher/${professor.id}`, {
         method: 'PUT',
@@ -124,7 +119,6 @@
           cpf: cpf,
           phone: telefone,
           email,
-          password,
           address: endereco,
         }),
       });
