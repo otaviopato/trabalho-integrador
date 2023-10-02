@@ -2,6 +2,11 @@
 
 Desenvolvimento de um software web para uma escola de artes marciais utilizando Spring.
 
+## Informações do Projeto
+-As informações detalhadas e os requisitos essenciais deste projeto podem ser encontrados [neste arquivo PDF](trabalho-integrador/PROJECT-DETAILS.pdf). 
+-Recomendamos a leitura atenta do documento para compreender plenamente o escopo e os objetivos do projeto. 
+-O PDF fornecerá todas as diretrizes necessárias para o desenvolvimento bem-sucedido deste projeto.
+
 ## Tecnologias utilizadas
 
 - Java 17
