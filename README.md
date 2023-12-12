@@ -5,7 +5,9 @@ Desenvolvimento de um software web para uma escola de artes marciais utilizando 
 ## Informações do Projeto
 - As informações detalhadas e os requisitos essenciais deste projeto podem ser encontrados [neste arquivo PDF](PROJECT-DETAILS.pdf).
 - O modelo conceitual pode ser encontrado em [.brM3](conceptual-model/Conceitual.brM3) ou em uma imagem [.png](conceptual-model/Conceitual-Imagem.png).
-- O modelo lógico relacional pode ser encontrado de forma gráfica em [.png](conceptual-model/Logic-Image.png). 
+- O modelo lógico relacional pode ser encontrado de forma gráfica em [.png](conceptual-model/Logic-Image.png).
+- O script de criação do banco pode ser encontrado em [script de criação](conceptual-model/academiaCriacao.sql).
+- O script de população do banco pode ser encontrado em [script de população](conceptual-model/academiaPopulacao.sql). 
 - Recomendamos a leitura atenta do documento para compreender plenamente o escopo e os objetivos do projeto. 
 - O PDF fornecerá todas as diretrizes necessárias para o desenvolvimento bem-sucedido deste projeto.
 
