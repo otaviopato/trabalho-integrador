@@ -37,7 +37,7 @@ create table pagamento(
        valor     numeric (10,2) not null,
        data    date not null,
        matricula integer not null,
-       constraint pk_pagamento primary key (id),
+       constraint pk_pagamento primary key (id,data),
        constraint fk_pagamento_matricula foreign key (matricula) references matricula(id)
 );
 create table frequencia(
@@ -45,7 +45,7 @@ create table frequencia(
        presenca bool not null,
        data    date not null,
        matricula integer not null,
-       constraint pk_frequencia primary key (id),
+       constraint pk_frequencia primary key (id,data),
        constraint fk_frequencioa_matricula foreign key (matricula) references matricula(id)
 );
 create table aluno(
